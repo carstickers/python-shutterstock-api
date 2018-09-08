@@ -16,8 +16,14 @@ class API:
         endpoint = endpoint.format(**params)
 
 
-def test_configure_api():
-    api = configure_api(API('test'))
+api = configure_api(API('test'))
+
+
+def test_configure_api_client():
     assert issubclass(api.Image, resources.Image)
     assert issubclass(api.ImageCollection, resources.ImageCollection)
     assert issubclass(api.ImageLicense, resources.ImageLicense)
+
+
+def test_endpoint_param_format():
+    pass
