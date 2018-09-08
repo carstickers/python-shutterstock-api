@@ -26,4 +26,4 @@ def test_configure_api_client():
 
 
 def test_endpoint_param_format():
-    pass
+    assert api.Image.GET.format(id=5) == '/images/5'

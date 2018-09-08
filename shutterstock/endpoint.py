@@ -9,5 +9,5 @@ class EndPoint:
     def __init__(self, endpoint):
         self.endpoint = endpoint
 
-    def format(self, params):
+    def format(self, **params):
         return self.endpoint.format(**params)
