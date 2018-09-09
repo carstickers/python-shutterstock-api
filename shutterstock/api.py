@@ -16,7 +16,7 @@ class ShutterstockAPI:
         }
 
     def request(self, method, endpoint, **params):
-        endpoint = endpoint.format(**params)
+        endpoint, params = endpoint.prepare(**params)
 
         response = method(
             'https://api.shutterstock.com/v2{endpoint}'.format(

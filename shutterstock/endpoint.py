@@ -8,6 +8,9 @@ class EndPointParam:
         self.help_text = help_text
         self.required = required
 
+    def clean(self, value):
+        return value
+
 
 class ChoicesParam(EndPointParam):
     def __init__(self, choices, *args, **kwargs):
@@ -31,15 +34,22 @@ class EndpointMeta(type):
 class EndPoint(metaclass=EndpointMeta):
     params = ()
 
-    def __init__(self, endpoint):
-        self.endpoint = endpoint
+    def __init__(self, uri):
+        self.uri = uri
 
-    def format(self, **params):
-        return self.endpoint.format(**params)
+    def prepare(self, **kwargs):
+        uri = self.uri.format(**kwargs)
+        params = {}
+
+        for param in self.params:
+            if param.name in kwargs:
+                params[param.name] = param.clean(kwargs.get(param.name))
+
+        return uri, params
 
     def explain(self):
-        return "URL: {endpoint}\n\nDescription: {doc}\n\nParams:\n{params}".format(
-            endpoint=self.endpoint,
+        return "URI: {uri}\n\nDescription: {doc}\n\nParams:\n{params}".format(
+            uri=self.uri,
             doc=self.__doc__,
             params="\n".join(
                 [
