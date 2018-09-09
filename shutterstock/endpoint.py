@@ -1,4 +1,3 @@
-from collections import OrderedDict
 
 
 class EndPointParam:
@@ -17,23 +16,21 @@ class ChoicesParam(EndPointParam):
 
 
 class EndpointMeta(type):
-    @classmethod
-    def __prepare__(mcs, name, bases):
-        print('__prepare__ meta')
-        return OrderedDict()
-
     def __new__(mcs, clsname, bases, clsdict):
-        clsdict['params'] = []
+        params = []
         for name, val in clsdict.items():
             if isinstance(val, EndPointParam):
                 clsdict[name].name = name
-                clsdict['params'].append(val)
+                params.append(val)
 
-        clsobj = super().__new__(mcs, clsname, bases, dict(clsdict))
+        clsdict['params'] = tuple(params)
+        clsobj = super().__new__(mcs, clsname, bases, clsdict)
         return clsobj
 
 
 class EndPoint(metaclass=EndpointMeta):
+    params = ()
+
     def __init__(self, endpoint):
         self.endpoint = endpoint
 

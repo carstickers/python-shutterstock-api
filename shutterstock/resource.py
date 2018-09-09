@@ -1,5 +1,6 @@
 from functools import partial
 
+
 class ResourceObjectInitializer:
     def __init__(self, cls, func, instance):
         self.func = func
