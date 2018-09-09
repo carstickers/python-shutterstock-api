@@ -1,11 +1,23 @@
-from shutterstock.endpoint import EndPoint, EndPointParam
+from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam
 from shutterstock.resource import Resource, ResourceObjectMethod, \
     ResourceCollectionMethod
 
 
+class ImageEndPoint(EndPoint):
+    """Endpoint for Shutterstock images"""
+    MINIMAL = 'minimal'
+    FULL = 'full'
+    VIEW_CHOICES = (MINIMAL, FULL, )
+
+    id = EndPointParam(required=True,
+                       help_text='Required. The ID of the image.')
+    view = ChoicesParam(required=True, default=MINIMAL, choices=VIEW_CHOICES,
+                        help_text='Required. Minimal view does not return licensing options, categories, keywords')
+
+
 class Image(Resource):
     LIST = EndPoint('/images')
-    GET = EndPoint('/images/{id}')
+    GET = ImageEndPoint('/images/{id}')
 
 
 class ImageCollectionListEndPoint(EndPoint):
