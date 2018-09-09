@@ -22,12 +22,14 @@ def test_endpoint_param_setup():
 
 def test_endpoint_prepare():
     endpoint = SimpleEndPoint('/simple/{id}')
-    uri, params = endpoint.prepare(id=5, nothing=True, choice=SimpleEndPoint.NO)
+    uri, params = endpoint.prepare(id=5, nothing=True)
     assert uri == '/simple/5'
 
     assert 'nothing' not in params
 
     assert 'id' in params
     assert params['id'] == 5
+
+    # Test default on require field
     assert 'choice' in params
-    assert params['choice'] == SimpleEndPoint.NO
+    assert params['choice'] == SimpleEndPoint.MAYBE

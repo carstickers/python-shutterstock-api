@@ -1,6 +1,8 @@
 
 
 class EndPointParam:
+    NO_VALUE = ()  # Empty tuple for testing against
+
     def __init__(self, vtype=str, default=None, help_text=None, required=False):
         self.name = 'param'
         self.data_type = vtype
@@ -9,6 +11,9 @@ class EndPointParam:
         self.required = required
 
     def clean(self, value):
+        if value is EndPointParam.NO_VALUE or (value is None and self.required):
+            value = self.default
+
         return value
 
 
@@ -42,8 +47,7 @@ class EndPoint(metaclass=EndpointMeta):
         params = {}
 
         for param in self.params:
-            if param.name in kwargs:
-                params[param.name] = param.clean(kwargs.get(param.name))
+            params[param.name] = param.clean(kwargs.get(param.name, EndPointParam.NO_VALUE))
 
         return uri, params
 
