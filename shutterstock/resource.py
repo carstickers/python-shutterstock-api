@@ -90,6 +90,10 @@ class Resource:
     def all(cls, **params):
         return cls.API.get(cls.LIST, **params)
 
+    @ResourceCollectionMethod()
+    def list(cls, **params):
+        return cls.API.get(cls.LIST, **params)
+
     @ResourceObjectMethod(id='id')
     def get(cls, **params):
         return cls.API.get(cls.GET, **params)

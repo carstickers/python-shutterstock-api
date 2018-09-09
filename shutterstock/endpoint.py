@@ -22,6 +22,16 @@ class ChoicesParam(EndPointParam):
         super().__init__(*args, **kwargs)
         self.choices = choices
 
+    def clean(self, value):
+        value = super().clean(value)
+
+        if value is not None and value not in self.choices:
+            raise ValueError("Invalid Choice. Choices are {}".format(
+                ', '.join(self.choices))
+            )
+
+        return value
+
 
 class EndpointMeta(type):
     def __new__(mcs, clsname, bases, clsdict):

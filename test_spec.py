@@ -38,3 +38,10 @@ def test_endpoint_prepare():
 
     # Test that not_required is not in params list
     assert 'not_required' not in params
+
+    invalid_choice_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice='hard no')
+    except ValueError:
+        invalid_choice_raised = True
+    assert invalid_choice_raised

@@ -25,7 +25,7 @@ class ShutterstockAPI:
             params=params,
             headers=self.headers
         )
-        print(json.loads(response.content))
+        print(params)
         return json.loads(response.content)
 
     def get(self, endpoint, **params):

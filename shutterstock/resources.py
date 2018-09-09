@@ -16,7 +16,7 @@ class ImageEndPoint(EndPoint):
 
 
 class Image(Resource):
-    LIST = EndPoint('/images')
+    LIST = ImageEndPoint('/images')
     GET = ImageEndPoint('/images/{id}')
 
 
