@@ -53,3 +53,7 @@ class ImageLicense(Resource):
     @ResourceCollectionMethod(id='id')
     def license(cls, **params):
         return cls.API.post(cls.LICENSE, **params)
+    
+    
+class ImageContributor(Resource):
+    GET = EndPoint('/contributors/{contributor_id}')
