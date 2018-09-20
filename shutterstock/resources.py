@@ -15,6 +15,11 @@ class ImageEndPoint(EndPoint):
                         help_text='Required. Minimal view does not return licensing options, categories, keywords')
 
 
+class Contributor(Resource):
+    LIST = EndPoint('/contributors')
+    GET = EndPoint('/contributors/{id}')
+
+
 class Image(Resource):
     LIST = ImageEndPoint('/images')
     GET = ImageEndPoint('/images/{id}')
@@ -39,12 +44,12 @@ class ImageCollection(Resource):
 class ImageLicense(Resource):
     LIST = EndPoint('/images/licenses')
     DOWNLOAD = EndPoint('/images/licenses/{id}/downloads')
-    LICENSE = EndPoint('/images/licenses')
+    LICENSE = EndPoint('/images/licenses?subscription_id={subscription_id}', params=['images'])
 
     @ResourceObjectMethod(id='id')
     def download(cls, **params):
         return cls.API.post(cls.DOWNLOAD, **params)
 
-    @ResourceObjectMethod(id='id')
+    @ResourceCollectionMethod(id='id')
     def license(cls, **params):
         return cls.API.post(cls.LICENSE, **params)

@@ -49,8 +49,9 @@ class EndpointMeta(type):
 class EndPoint(metaclass=EndpointMeta):
     params = ()
 
-    def __init__(self, uri):
+    def __init__(self, uri, params=None):
         self.uri = uri
+        self.simple_params = params
 
     def prepare(self, **kwargs):
         uri = self.uri.format(**kwargs)
@@ -60,6 +61,12 @@ class EndPoint(metaclass=EndpointMeta):
             value = param.clean(kwargs.get(param.name, EndPointParam.NO_VALUE))
             if value is not EndPointParam.NO_VALUE:
                 params[param.name] = value
+
+        if isinstance(self.simple_params, list):
+            for param in self.simple_params:
+                value = kwargs.get(param, None)
+                if value is not None:
+                    params[param] = value
 
         return uri, params
 

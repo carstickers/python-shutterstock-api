@@ -9,33 +9,37 @@ class ShutterstockAPI:
     @property
     def headers(self):
         return {
-            'Content-Type': 'application/xml',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer {token}'.format(
                 token=self.token
             )
         }
 
-    def request(self, method, endpoint, **params):
+    def request(self, method, endpoint, data_key='params', **params):
         endpoint, params = endpoint.prepare(**params)
+        data = {
+            data_key: params
+        }
 
         response = method(
             'https://api.shutterstock.com/v2{endpoint}'.format(
                 endpoint=endpoint
             ),
-            params=params,
-            headers=self.headers
+            headers=self.headers,
+            **data
         )
         print(params)
+        print(response.content)
         return json.loads(response.content)
 
     def get(self, endpoint, **params):
         return self.request(requests.get, endpoint, **params)
 
     def post(self, endpoint, **params):
-        return self.request(requests.post, endpoint, **params)
+        return self.request(requests.post, endpoint, data_key='json', **params)
 
     def put(self, endpoint, **params):
-        return self.request(requests.put, endpoint, **params)
+        return self.request(requests.put, endpoint, data_key='json', **params)
 
     def delete(self, endpoint, **params):
         return self.request(requests.delete, endpoint, **params)
