@@ -15,7 +15,7 @@ def find_packages(path, prefix=""):
 setup(
   name='shutterstock',
   packages=list(find_packages(shutterstock.__path__, shutterstock.__name__)),
-  version='0.1.0',
+  version='0.1.1',
   description='Pyhton Shutterstock API Client',
   author='Matt Roberts',
   author_email='contact@maleero.com',

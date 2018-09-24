@@ -20,6 +20,9 @@ class ResourceCollectionInitializer:
     def __call__(self, *args, **kwargs):
         collection = []
         data = self.func(*args, **kwargs)
+        if 'errors' in data:
+            raise Exception(data['errors'][0]['message'])
+
         for item in data['data']:
             collection.append(self.cls(**item))
         return collection
