@@ -3,4 +3,6 @@ setup.cfg
 setup.py
 shutterstock/__init__.py
 shutterstock/api.py
+shutterstock/endpoint.py
+shutterstock/resource.py
 shutterstock/resources.py
