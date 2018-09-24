@@ -28,9 +28,7 @@ class ShutterstockAPI:
             headers=self.headers,
             **data
         )
-        print(params)
-        print(response.content)
-        return json.loads(response.content)
+        return json.loads(response.content.decode('utf-8'))
 
     def get(self, endpoint, **params):
         return self.request(requests.get, endpoint, **params)
