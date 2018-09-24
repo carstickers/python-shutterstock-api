@@ -20,7 +20,7 @@ setup(
   author='Matt Roberts',
   author_email='contact@maleero.com',
   url='https://github.com/malero/python-shutterstock-api',
-  download_url='https://github.com/malero/python-shutterstock-api/archive/v0.1.0.tar.gz',
+  download_url='https://github.com/malero/python-shutterstock-api/archive/v0.1.1.tar.gz',
   keywords=['shutterstock', ],
   classifiers=[],
 )
