@@ -1,4 +1,4 @@
-from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam
+from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam, IntegerParam
 
 
 class SimpleEndPoint(EndPoint):
