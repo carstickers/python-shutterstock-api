@@ -17,7 +17,7 @@ class SimpleEndPoint(EndPoint):
 
 
 def test_endpoint_param_setup():
-    assert len(SimpleEndPoint.params) == 3
+    assert len(SimpleEndPoint.params) == 4
     assert SimpleEndPoint.id in SimpleEndPoint.params
     assert SimpleEndPoint.choice in SimpleEndPoint.params
     assert SimpleEndPoint.not_required in SimpleEndPoint.params

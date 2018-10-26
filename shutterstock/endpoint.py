@@ -42,15 +42,16 @@ class IntegerParam(EndPointParam):
     def clean(self, value):
         value = super().clean(value)
 
-        if self.min is not None and value < self.min:
-            raise ValueError("Invalid Value. Minimum allowed value is {}".format(
-                self.min
-            ))
+        if value is not EndPointParam.NO_VALUE:
+            if self.min is not None and value < self.min:
+                raise ValueError("Invalid Value. Minimum allowed value is {}".format(
+                    self.min
+                ))
 
-        if self.max is not None and value > self.max:
-            raise ValueError("Invalid Value. Maximum allowed value is {}".format(
-                self.min
-            ))
+            if self.max is not None and value > self.max:
+                raise ValueError("Invalid Value. Maximum allowed value is {}".format(
+                    self.min
+                ))
 
         return value
 
