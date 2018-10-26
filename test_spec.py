@@ -49,21 +49,21 @@ def test_endpoint_prepare():
 
     invalid_value_raised = False
     try:
-        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE, limit=0)
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE, limit=0)
     except ValueError:
         invalid_value_raised = True
     assert invalid_value_raised
 
     invalid_value_raised = False
     try:
-        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE, limit=101)
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE, limit=101)
     except ValueError:
         invalid_value_raised = True
     assert invalid_value_raised
 
     invalid_value_raised = False
     try:
-        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE,
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE,
                                        limit=100)
     except ValueError:
         invalid_value_raised = True
@@ -71,7 +71,7 @@ def test_endpoint_prepare():
 
     invalid_value_raised = False
     try:
-        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE,
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE,
                                        limit=1)
     except ValueError:
         invalid_value_raised = True
