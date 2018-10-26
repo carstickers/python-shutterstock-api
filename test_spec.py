@@ -13,6 +13,7 @@ class SimpleEndPoint(EndPoint):
     choice = ChoicesParam(required=True, default=MAYBE, choices=CHOICES,
                            help_text='Required. Choice field')
     not_required = EndPointParam(help_text='This field is not required.')
+    limit = IntegerParam(min=1, max=100)
 
 
 def test_endpoint_param_setup():
@@ -45,3 +46,33 @@ def test_endpoint_prepare():
     except ValueError:
         invalid_choice_raised = True
     assert invalid_choice_raised
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE, limit=0)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE, limit=101)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE,
+                                       limit=100)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised is False
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=EndPointParam.MAYBE,
+                                       limit=1)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised is False

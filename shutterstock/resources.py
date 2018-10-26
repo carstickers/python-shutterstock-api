@@ -29,10 +29,15 @@ class ImageCollectionListEndPoint(EndPoint):
     id = EndPointParam()
 
 
+class ImageCollectionItemsEndPoint(EndPoint):
+    id = EndPointParam()
+    per_page = IntegerParam(min=1, max=150)
+
+
 class ImageCollection(Resource):
     LIST = ImageCollectionListEndPoint('/images/collections')
     GET = EndPoint('/images/collections/{id}')
-    ITEMS = EndPoint('/images/collections/{id}/items')
+    ITEMS = ImageCollectionItemsEndPoint('/images/collections/{id}/items')
 
     @ResourceCollectionMethod(resource=Image, id='id')
     def items(cls, **params):
@@ -53,7 +58,7 @@ class ImageLicense(Resource):
     @ResourceCollectionMethod(id='id')
     def license(cls, **params):
         return cls.API.post(cls.LICENSE, **params)
-    
-    
+
+
 class ImageContributor(Resource):
     GET = EndPoint('/contributors/{contributor_id}')
