@@ -23,8 +23,15 @@ class ResourceCollectionInitializer:
         if 'errors' in data:
             raise Exception(data['errors'][0]['message'])
 
-        for item in data['data']:
-            collection.append(self.cls(**item))
+        if 'data' not in data:
+            return collection
+
+        try:
+            for item in data['data']:
+                collection.append(self.cls(**item))
+        except TypeError:
+            pass
+
         return collection
 
 

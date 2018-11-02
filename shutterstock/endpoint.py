@@ -33,6 +33,29 @@ class ChoicesParam(EndPointParam):
         return value
 
 
+class IntegerParam(EndPointParam):
+    def __init__(self, min=None, max=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.min = min
+        self.max = max
+
+    def clean(self, value):
+        value = super().clean(value)
+
+        if value is not EndPointParam.NO_VALUE:
+            if self.min is not None and value < self.min:
+                raise ValueError("Invalid Value. Minimum allowed value is {}".format(
+                    self.min
+                ))
+
+            if self.max is not None and value > self.max:
+                raise ValueError("Invalid Value. Maximum allowed value is {}".format(
+                    self.min
+                ))
+
+        return value
+
+
 class EndpointMeta(type):
     def __new__(mcs, clsname, bases, clsdict):
         params = []

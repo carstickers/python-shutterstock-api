@@ -1,4 +1,5 @@
-from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam
+from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam,\
+    IntegerParam
 from shutterstock.resource import Resource, ResourceObjectMethod, \
     ResourceCollectionMethod
 
@@ -29,16 +30,36 @@ class ImageCollectionListEndPoint(EndPoint):
     id = EndPointParam()
 
 
+class ImageCollectionItemsEndPoint(EndPoint):
+    id = EndPointParam()
+    per_page = IntegerParam(min=1, max=150)
+    page = IntegerParam(default=1, min=1)
+
+
 class ImageCollection(Resource):
     LIST = ImageCollectionListEndPoint('/images/collections')
     GET = EndPoint('/images/collections/{id}')
-    ITEMS = EndPoint('/images/collections/{id}/items')
+    ITEMS = ImageCollectionItemsEndPoint('/images/collections/{id}/items')
 
     @ResourceCollectionMethod(resource=Image, id='id')
     def items(cls, **params):
-        response = cls.API.get(cls.ITEMS, **params)
-        ids = [item['id'] for item in response['data']]
-        return cls.API.get(Image.LIST, id=ids, view=params.get('view', 'minimal'))
+        detail = cls.API.get(cls.GET, id=params.get('id'))
+        item_count = detail['total_item_count']
+        per_page = params.get('per_page', 150)
+        ids = []
+        for page in range(0, math.ceil(item_count / per_page)):
+            response = cls.API.get(cls.ITEMS, page=page + 1, **params)
+            page_ids = [item['id'] for item in response['data']]
+            ids.extend(page_ids)
+
+        results = {'data': []}
+        for page in range(0, math.ceil(len(ids) / 100)):
+            page_ids = ids[page * 100:page * 100 + 100]
+            if len(page_ids):
+                images_to_add = cls.API.get(Image.LIST, id=page_ids,
+                                            view=params.get('view', 'minimal'))
+                results['data'].extend(images_to_add['data'])
+        return results
 
 
 class ImageLicense(Resource):
@@ -53,7 +74,7 @@ class ImageLicense(Resource):
     @ResourceCollectionMethod(id='id')
     def license(cls, **params):
         return cls.API.post(cls.LICENSE, **params)
-    
-    
+
+
 class ImageContributor(Resource):
     GET = EndPoint('/contributors/{contributor_id}')

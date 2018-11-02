@@ -1,4 +1,4 @@
-from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam
+from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam, IntegerParam
 
 
 class SimpleEndPoint(EndPoint):
@@ -13,10 +13,11 @@ class SimpleEndPoint(EndPoint):
     choice = ChoicesParam(required=True, default=MAYBE, choices=CHOICES,
                            help_text='Required. Choice field')
     not_required = EndPointParam(help_text='This field is not required.')
+    limit = IntegerParam(min=1, max=100)
 
 
 def test_endpoint_param_setup():
-    assert len(SimpleEndPoint.params) == 3
+    assert len(SimpleEndPoint.params) == 4
     assert SimpleEndPoint.id in SimpleEndPoint.params
     assert SimpleEndPoint.choice in SimpleEndPoint.params
     assert SimpleEndPoint.not_required in SimpleEndPoint.params
@@ -45,3 +46,33 @@ def test_endpoint_prepare():
     except ValueError:
         invalid_choice_raised = True
     assert invalid_choice_raised
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE, limit=0)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE, limit=101)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE,
+                                       limit=100)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised is False
+
+    invalid_value_raised = False
+    try:
+        uri, params = endpoint.prepare(id=5, choice=SimpleEndPoint.MAYBE,
+                                       limit=1)
+    except ValueError:
+        invalid_value_raised = True
+    assert invalid_value_raised is False
