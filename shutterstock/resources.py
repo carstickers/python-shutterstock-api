@@ -1,3 +1,5 @@
+import math
+
 from shutterstock.endpoint import EndPoint, EndPointParam, ChoicesParam,\
     IntegerParam
 from shutterstock.resource import Resource, ResourceObjectMethod, \
