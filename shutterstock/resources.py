@@ -47,7 +47,7 @@ class ImageCollection(Resource):
     def items(cls, **params):
         detail = cls.API.get(cls.GET, id=params.get('id'))
         item_count = detail['total_item_count']
-        per_page = params.get('per_page', 150)
+        per_page = params.get('per_page', 100)
         ids = []
         for page in range(0, math.ceil(item_count / per_page)):
             response = cls.API.get(cls.ITEMS, page=page + 1, **params)
