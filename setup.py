@@ -15,12 +15,12 @@ def find_packages(path, prefix=""):
 setup(
   name='shutterstock',
   packages=list(find_packages(shutterstock.__path__, shutterstock.__name__)),
-  version='0.1.3',
+  version='0.1.4',
   description='Python Shutterstock API Client',
   author='Matt Roberts',
   author_email='contact@maleero.com',
   url='https://github.com/malero/python-shutterstock-api',
-  download_url='https://github.com/malero/python-shutterstock-api/archive/v0.1.3.tar.gz',
+  download_url='https://github.com/malero/python-shutterstock-api/archive/v0.1.4.tar.gz',
   keywords=['shutterstock', ],
   classifiers=[],
 )
