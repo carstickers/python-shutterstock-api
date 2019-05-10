@@ -33,14 +33,16 @@ class ShutterstockAPI:
         )
         status = response.status_code // 100
 
+        response_content = json.loads(response.content.decode('utf-8'))
+
         if status == 2:
-            return json.loads(response.content.decode('utf-8'))
+            return response_content
         elif status == 3:
-            raise APIRedirectError
+            raise APIRedirectError(response_content['message'])
         elif status == 4:
-            raise APIClientError
+            raise APIClientError(response_content['message'])
         elif status == 5:
-            raise APIServerError
+            raise APIServerError(response_content['message'])
 
     def get(self, endpoint, **params):
         return self.request(requests.get, endpoint, **params)
