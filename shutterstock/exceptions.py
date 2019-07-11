@@ -22,3 +22,13 @@ class APIServerError(APIError):
 
 class InvalidAPIResponseError(APIError):
     pass
+
+
+class APIResponseError(APIError):
+    errors = None
+    data = None
+
+    def  __init__(self, message, status_code, errors, data):
+        super().__init__(message, status_code)
+        self.errors = errors
+        self.data = data
