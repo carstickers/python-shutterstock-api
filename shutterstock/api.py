@@ -1,6 +1,9 @@
 import json
 import requests
 
+from shutterstock.exceptions import APIRedirectError, APIClientError, \
+    APIServerError, InvalidAPIResponseError
+
 
 class ShutterstockAPI:
     def __init__(self, token):
@@ -28,7 +31,23 @@ class ShutterstockAPI:
             headers=self.headers,
             **data
         )
-        return json.loads(response.content.decode('utf-8'))
+        status = response.status_code // 100
+
+        try:
+            response_content = json.loads(response.content.decode('utf-8'))
+        except Exception:
+            raise InvalidAPIResponseError(response.content, response.status_code)
+
+        if status == 2:
+            return response_content
+        elif status == 3:
+            raise APIRedirectError(response_content['message'], response.status_code)
+        elif status == 4:
+            raise APIClientError(response_content['message'], response.status_code)
+        elif status == 5:
+            raise APIServerError(response_content['message'], response.status_code)
+
+        raise InvalidAPIResponseError(response_content, response.status_code)
 
     def get(self, endpoint, **params):
         return self.request(requests.get, endpoint, **params)
