@@ -18,6 +18,14 @@ class ImageEndPoint(EndPoint):
                         help_text='Required. Minimal view does not return licensing options, categories, keywords')
 
 
+class ImageSearchEndPoint(EndPoint):
+    """Endpoint for shutterstock image search"""
+
+    page = IntegerParam(default=1, min=1)
+    per_page = IntegerParam(default=20, min=1)
+    query = EndPointParam(required=True, help_text='Required. The search query')
+
+
 class Contributor(Resource):
     LIST = EndPoint('/contributors')
     GET = EndPoint('/contributors/{id}')
@@ -26,6 +34,11 @@ class Contributor(Resource):
 class Image(Resource):
     LIST = ImageEndPoint('/images')
     GET = ImageEndPoint('/images/{id}')
+    SEARCH = ImageSearchEndPoint('/images/search')
+
+    @ResourceCollectionMethod()
+    def search(cls, **params):
+        return cls.API.get(cls.SEARCH, **params)
 
 
 class ImageCollectionListEndPoint(EndPoint):
