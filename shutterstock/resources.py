@@ -22,8 +22,33 @@ class ImageSearchEndPoint(EndPoint):
     """Endpoint for shutterstock image search"""
 
     page = IntegerParam(default=1, min=1)
-    per_page = IntegerParam(default=20, min=1)
+    per_page = IntegerParam(default=50, min=1)
     query = EndPointParam(required=True, help_text='Required. The search query')
+    added_date = EndPointParam(required=False, help_text='Show images added on the specified date, in the format YYYY-MM-DD')
+    added_date_start = EndPointParam(required=False, help_text='Show images added on or after the specified date, in the format YYYY-MM-DD')
+    added_date_end = EndPointParam(required=False, help_text='Show images added before the specified date, in the format YYYY-MM-DD')
+    category = EndPointParam(required=False, help_text='Show images with the specified Shutterstock-defined category; specify a category name or ID')
+    color = EndPointParam(required=False, help_text='Specify either a hexadecimal color in the format "4F21EA" or "grayscale"; the API groups it into one of 15 color categories and returns images that primarily use that color category')
+    contributor = EndPointParam(required=False, help_text='Show images with the specified contributor names or IDs, allows multiple')
+    contributor_country = EndPointParam(required=False, help_text='Show images from contributors in one or more specified countries by 2-letter ISO 3166-1 alpha-2 country code, such as DE or US')
+    height_from = EndPointParam(required=False, help_text='Show images with the specified height or larger, in pixels')
+    height_to = EndPointParam(required=False, help_text='Show images with the specified height or smaller, in pixels')
+    image_type = EndPointParam(required=False, help_text='Show images of the specified type. Valid values: photo, illustration, vector')
+    language = EndPointParam(required=False, help_text='Set query and result language (uses Accept-Language header if not set). Valid values: cs, da, de, en, es, fi, fr, hu, it, ja, ko, nb, nl, pl, pt, ru, sv, th, tr, zh, zh-Hant')
+    license = EndPointParam(required=False, help_text='Show only images with the specified license. Valid values: commercial, editorial, enhanced, sensitive, NOT enhanced, NOT sensitive')
+    model = EndPointParam(required=False, help_text='Show image results with the specified model IDs')
+    orientation = EndPointParam(required=False, help_text='Show image results with horizontal or vertical orientation. Valid values: horizontal, vertical')
+    people_model_released = EndPointParam(required=False, help_text='Show images of people with a signed model release')
+    people_age = EndPointParam(required=False, help_text='Show images that feature people of the specified age category, Valid values: infants, children, teenagers, 20s, 30s, 40s, 50s, 60s, older')
+    people_ethnicity = EndPointParam(required=False, help_text='Show images with people of the specified ethnicity. Valid values: african, african_american, black, brazilian, chinese, caucasian, east_asian, hispanic, japanese, middle_eastern, native_american, pacific_islander, south_asian, southeast_asian, other')
+    people_gender = EndPointParam(required=False, help_text='Show images with people of the specified gender. Valid values: male, female, both')
+    people_number = EndPointParam(required=False, help_text='Show images with the specified number of people')
+    safe = EndPointParam(required=False, default='true', help_text='Enable or disable safe search')
+    sort = EndPointParam(required=False, help_text='Sort by. Valid values: newest, popular, relevance, random')
+    spellcheck_query = EndPointParam(required=False, help_text='Spellcheck the search query and return results on suggested spellings')
+    view = EndPointParam(required=False, help_text='Amount of detail to render in the response. Valid values: minimal, full')
+    width_from = EndPointParam(required=False, help_text='Show images with the specified width or larger, in pixels')
+    width_to = EndPointParam(required=False, help_text='Show images with the specified width or smaller, in pixels')
 
 
 class Contributor(Resource):
@@ -36,7 +61,7 @@ class Image(Resource):
     GET = ImageEndPoint('/images/{id}')
     SEARCH = ImageSearchEndPoint('/images/search')
 
-    @ResourceCollectionMethod()
+    @classmethod
     def search(cls, **params):
         return cls.API.get(cls.SEARCH, **params)
 
