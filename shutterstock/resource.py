@@ -1,5 +1,7 @@
 from functools import partial
 
+from shutterstock.exceptions import APIResponseError
+
 
 class ResourceObjectInitializer:
     def __init__(self, cls, func, instance):
@@ -21,7 +23,16 @@ class ResourceCollectionInitializer:
         collection = []
         data = self.func(*args, **kwargs)
         if 'errors' in data:
-            raise Exception(data['errors'][0]['message'])
+            response_message = 'No error response provided'
+            response_data = {}
+            code = 200
+            if len(data['errors']) > 0:
+                message = data['errors'][0]['message']
+
+            if 'data' in data:
+                response_data = data['data']
+
+            raise APIResponseError(response_message, code, data['errors'], response_data)
 
         if 'data' not in data:
             return collection
